@@ -18,6 +18,8 @@ This is a simple Node.js utility to convert text to speech using Azure Cognitive
     | `SPEECH_KEY` | The key for your Azure Cognitive Services resource. |
     | `SPEECH_REGION` | The region for your Azure Cognitive Services resource. Eg: `southeastasia` |
     | `SPEECH_VOICE_NAME` | The name of the voice you want to use. Eg: `en-US-JennyNeural` |
+    | `SPEECH_VOICE_RATE` | The rate at which the voice should speak. Eg: `1` is the normal speed |
+    | `SPEECH_VOICE_PITCH` | The pitch of the voice. Eg: `0%` is the normal pitch |
     | `INPUT_FILE` | The path to the file containing the text you want to convert to speech. Eg: `./input.txt` |
     | `OUTPUT_DIR` | The path to the directory where you want to save the audio files. Eg: `./output`. If the directory doesn't exist, it will be created. |
     | `OUTPUT_FILE_PREFIX` | The prefix for the audio files. Eg: `TEST`. The output files will be named `TEST_LINE001`, `TEST_LINE002`, etc. |
@@ -32,6 +34,8 @@ This is a simple Node.js utility to convert text to speech using Azure Cognitive
     SPEECH_KEY=#Your Azure Service Key
     SPEECH_REGION=southeastasia
     SPEECH_VOICE_NAME=en-US-JennyNeural
+    SPEECH_VOICE_RATE=1
+    SPEECH_VOICE_PITCH=0%
 
     INPUT_FILE=./input.txt
 

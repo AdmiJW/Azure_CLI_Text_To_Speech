@@ -14,6 +14,8 @@ dotenv.config();
 const SPEECH_KEY = process.env.SPEECH_KEY;
 const SPEECH_REGION = process.env.SPEECH_REGION;
 const SPEECH_VOICE_NAME = process.env.SPEECH_VOICE_NAME;
+const SPEECH_VOICE_RATE = process.env.SPEECH_VOICE_RATE;
+const SPEECH_VOICE_PITCH = process.env.SPEECH_VOICE_PITCH;
 
 const INPUT_FILE = process.env.INPUT_FILE;
 const OUTPUT_DIR = process.env.OUTPUT_DIR;
@@ -26,6 +28,25 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
+
+
+
+// SSML parse
+function wrapSpeak(content) {
+    return `<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="en-US">`
+        + content
+        + `</speak>`;
+}
+
+
+function wrapVoice(voice, content) {
+    return `<voice name="${voice}">${content}</voice>`;
+}
+
+function wrapProsody(rate, pitch, content) {
+    return `<prosody rate="${rate}" pitch="${pitch}">${content}</prosody>`;
+}
+
 
 
 
@@ -77,11 +98,15 @@ for (let index = 0; index < lines.length; ++index) {
     const dest = path.join(OUTPUT_DIR, `${OUTPUT_FILE_PREFIX}_LINE${numbering}.${OUTPUT_FILE_EXTENSION}`);
     const audioConfig = sdk.AudioConfig.fromAudioFileOutput(dest);
 
+    // Wrap into SSML
+    const ssml = wrapSpeak(wrapVoice(SPEECH_VOICE_NAME, wrapProsody(SPEECH_VOICE_RATE, SPEECH_VOICE_PITCH, line)));
+
+
     // Create the speech synthesizer.
     let synthesizer = new sdk.SpeechSynthesizer(speechConfig, audioConfig);
 
     await new Promise((resolve, reject) => {
-        synthesizer.speakTextAsync(line, (result)=> {
+        synthesizer.speakSsmlAsync(ssml, (result)=> {
             if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) 
                 resolve();
             else 
